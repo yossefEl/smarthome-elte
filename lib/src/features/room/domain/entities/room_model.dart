@@ -35,15 +35,10 @@ class RoomModel {
         devices: json["devices"] == null ? [] : List<DeviceModel>.from(json["devices"]!.map((x) => DeviceModel.fromJson(x))),
         name: json["name"] as String?,
         description: json["description"],
-        // brightness: json["brightness"] as int?,
         brightness: int.tryParse(json["brightness"].toString()) ?? 0,
-        // occupancy: json["occupancy"] as int?,
         occupancy: int.tryParse(json["occupancy"].toString()) ?? 0,
-        //  json["oxygenLevel"] type 'double' is not a subtype of type 'int?' in type cast
         oxygenLevel: int.tryParse(json["oxygenLevel"].toString()) ?? 0,
-        // temperature: json["temperature"] as int?,
         temperature: int.tryParse(json["temperature"].toString()) ?? 0,
-        // livingRoom: json["livingRoom"] ?? false,
         livingRoom: json["livingRoom"] ?? false,
       );
 
