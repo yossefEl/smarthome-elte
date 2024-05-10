@@ -28,6 +28,13 @@ class _SimulatorViewState extends ConsumerState<SimulatorView> {
     return double.parse(value.toString());
   }
 
+  void initSimulatorState(RoomModel room) => ref.read(simulatorProvider.notifier).init(
+        brightness: room.brightness,
+        occupancy: room.occupancy,
+        oxygenLevel: room.oxygenLevel,
+        temperature: room.temperature,
+      );
+
   SimulatorState get simulationState => ref.watch(simulatorProvider);
   @override
   Widget build(BuildContext context) {
@@ -36,11 +43,17 @@ class _SimulatorViewState extends ConsumerState<SimulatorView> {
       if (rooms.isNotEmpty) {
         final currentRoom = getCurrentRoom(currentRoomIndex);
         if (currentRoom == null) return;
-        ref.read(simulatorProvider.notifier).init(
-            brightness: currentRoom.brightness,
-            occupancy: currentRoom.occupancy,
-            oxygenLevel: currentRoom.oxygenLevel,
-            temperature: currentRoom.temperature);
+        initSimulatorState(currentRoom);
+      } else {
+        ref.read(simulatorProvider.notifier).reset();
+      }
+    });
+
+    ref.listen(roomsProvider, (_, rooms) {
+      if (rooms.isNotEmpty) {
+        final currentRoom = getCurrentRoom(ref.read(activeRoomProvider));
+        if (currentRoom == null) return;
+        initSimulatorState(currentRoom);
       } else {
         ref.read(simulatorProvider.notifier).reset();
       }
@@ -173,7 +186,9 @@ class _SimulatorViewState extends ConsumerState<SimulatorView> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      ref.read(simulatorProvider.notifier).changeOccupancy(simulationState.occupancy - 1);
+                                      if (simulationState.occupancy > 0) {
+                                        ref.read(simulatorProvider.notifier).changeOccupancy(simulationState.occupancy - 1);
+                                      }
                                     },
                                     icon: const Icon(Icons.add, color: AppColors.white, size: 28)),
                                 const SizedBox(width: 20),
@@ -189,7 +204,9 @@ class _SimulatorViewState extends ConsumerState<SimulatorView> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      ref.read(simulatorProvider.notifier).changeOccupancy(simulationState.occupancy + 1);
+                                      if (simulationState.occupancy <= 100) {
+                                        ref.read(simulatorProvider.notifier).changeOccupancy(simulationState.occupancy + 1);
+                                      }
                                     },
                                     icon: const Icon(Icons.add, color: AppColors.white, size: 28))
                               ],

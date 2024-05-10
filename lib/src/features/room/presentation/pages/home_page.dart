@@ -87,6 +87,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 flex: 1,
                 child: MobileHomePageBody(
                   pageController: pageController,
+                  crossAxisCount: 3,
                 ),
               ),
               Expanded(

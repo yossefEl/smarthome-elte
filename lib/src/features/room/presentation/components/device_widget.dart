@@ -23,6 +23,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
   Widget build(BuildContext context) {
     const animationsDuration = Duration(milliseconds: 200);
     return GestureDetector(
+      onTap: () => widget.onChanged(!widget.device.status!),
       onLongPress: () async {
         showModalBottomSheet(
             context: context,

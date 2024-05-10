@@ -39,15 +39,18 @@ class RoomsNotifier extends StateNotifier<List<RoomModel>> {
         stompClient.subscribe(
             destination: '/topic/rooms',
             callback: (frame) {
-              log('Received message: ${frame.body.toString()}');
+              // log('Received message: ${frame.body.toString()}');
               // final body = jsonDecode(frame.body.toString());
               // log('Received message: $body');
               final jsonResp = jsonDecode(frame.body.toString());
-              final rooms = jsonResp.map<RoomModel>((e) => RoomModel.fromJson(e)).toList();
-              state = rooms;
-              state = rooms;
-              log("State: $state");
-              log(state.toString());
+              List<RoomModel> rms = [];
+              try {
+                rms = jsonResp.map<RoomModel>((e) => RoomModel.fromJson(e)).toList();
+              } catch (e) {
+                log("error from jsonDecode: $e", name: 'RoomsNotifier.subscribe');
+              }
+              state = rms;
+              log("State changed through websocket");
             });
       } else {
         log('Not connected to the server');

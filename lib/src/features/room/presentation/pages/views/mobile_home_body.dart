@@ -16,8 +16,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class MobileHomePageBody extends HookConsumerWidget {
   final PageController pageController;
-
-  const MobileHomePageBody({required this.pageController, super.key});
+  final int crossAxisCount;
+  const MobileHomePageBody({this.crossAxisCount = 2, required this.pageController, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +74,7 @@ class MobileHomePageBody extends HookConsumerWidget {
                                     SliverPadding(
                                       padding: const EdgeInsets.only(top: 10),
                                       sliver: SliverMasonryGrid.count(
-                                        crossAxisCount: 2,
+                                        crossAxisCount: crossAxisCount,
                                         mainAxisSpacing: 10,
                                         crossAxisSpacing: 10,
                                         childCount: devices.length,
@@ -83,7 +83,9 @@ class MobileHomePageBody extends HookConsumerWidget {
                                           return DeviceInfoWidget(
                                               device: device,
                                               onChanged: (value) async {
-                                                await ref.read(deviceProvider.notifier).update(device.copyWith(status: !value));
+                                                await ref
+                                                    .read(deviceProvider.notifier)
+                                                    .update(device.copyWith(status: !(device.status ?? false)));
                                               });
                                         },
                                       ),
