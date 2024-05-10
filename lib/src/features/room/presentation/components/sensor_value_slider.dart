@@ -41,7 +41,7 @@ class SensorValueSlider extends StatelessWidget {
                   activeColor: AppColors.primaryColor,
                   inactiveColor: AppColors.text.withOpacity(0.3),
                   divisions: 100,
-                  value: value,
+                  value: normalize(value, max),
                   min: min,
                   max: max,
                   onChanged: onChanged,
@@ -53,5 +53,9 @@ class SensorValueSlider extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  normalize(double value, double max) {
+    return value > max ? max : value;
   }
 }

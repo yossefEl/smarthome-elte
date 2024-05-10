@@ -10,7 +10,8 @@ import '../../components/sensor_value_slider.dart';
 import '../../providers/room_provider.dart';
 
 class SimulatorView extends StatefulHookConsumerWidget {
-  const SimulatorView({Key? key}) : super(key: key);
+  final PageController pageController;
+  const SimulatorView({required this.pageController, Key? key}) : super(key: key);
 
   @override
   ConsumerState<SimulatorView> createState() => _SimulatorViewState();
@@ -104,9 +105,15 @@ class _SimulatorViewState extends ConsumerState<SimulatorView> {
                           )
                           .toList(),
                       onChanged: (roomId) {
+                        final newPageIndex = rooms.indexWhere((element) => element.roomId == roomId);
                         ref.read(activeRoomProvider.notifier).changePage(
-                              rooms.indexWhere((element) => element.roomId == roomId),
+                              newPageIndex,
                             );
+                        widget.pageController.animateToPage(
+                          newPageIndex,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
                       },
                     ),
                   ),

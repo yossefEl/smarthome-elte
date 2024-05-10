@@ -89,9 +89,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   pageController: pageController,
                 ),
               ),
-              const Expanded(
+              Expanded(
                 flex: 1,
-                child: SimulatorView(),
+                child: SimulatorView(pageController: pageController),
               ),
             ],
           )),
