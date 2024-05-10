@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:stmart_home_elte/src/features/room/presentation/views/home_page.dart';
+import 'package:stmart_home_elte/src/features/room/presentation/pages/home_page.dart';
 
 import 'src/core/theme/themes.dart';
 

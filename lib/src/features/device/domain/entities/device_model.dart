@@ -28,10 +28,24 @@ class DeviceModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "deviceId": deviceId,
         "type": type,
         "status": status,
         "numLevel": numLevel,
-        "events": events == null ? [] : List<dynamic>.from(events!.map((x) => x)),
       };
+
+  DeviceModel copyWith({
+    int? deviceId,
+    String? type,
+    bool? status,
+    int? numLevel,
+    List<dynamic>? events,
+  }) {
+    return DeviceModel(
+      deviceId: deviceId ?? this.deviceId,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      numLevel: numLevel ?? this.numLevel,
+      events: events ?? this.events,
+    );
+  }
 }

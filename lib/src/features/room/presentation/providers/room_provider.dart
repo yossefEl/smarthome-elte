@@ -18,6 +18,7 @@ final roomsProvider = StateNotifierProvider<RoomsNotifier, List<RoomModel>>((ref
 class RoomsNotifier extends StateNotifier<List<RoomModel>> {
   final RoomService _roomService;
   final Ref _ref;
+  bool isLoading = false;
 
   RoomsNotifier(this._ref, this._roomService) : super([]) {
     Future.microtask(() async {
@@ -31,7 +32,7 @@ class RoomsNotifier extends StateNotifier<List<RoomModel>> {
       );
 
       stompClient.activate();
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 3));
 
       if (stompClient.connected) {
         log('Connected to the server');
@@ -42,8 +43,10 @@ class RoomsNotifier extends StateNotifier<List<RoomModel>> {
               // final body = jsonDecode(frame.body.toString());
               // log('Received message: $body');
               final jsonResp = jsonDecode(frame.body.toString());
-              state = jsonResp.map<RoomModel>((e) => RoomModel.fromJson(e)).toList();
-
+              final rooms = jsonResp.map<RoomModel>((e) => RoomModel.fromJson(e)).toList();
+              state = rooms;
+              state = rooms;
+              log("State: $state");
               log(state.toString());
             });
       } else {

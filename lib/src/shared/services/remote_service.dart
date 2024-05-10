@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -26,7 +27,14 @@ class RemoteService {
   }
 
   FailureOrOk<T?> put<T>(String path, {required Map<String, dynamic> body, T Function(Map<String, dynamic>)? transformer}) async {
-    final response = await client.put(Uri.parse('$baseUrl$path'), body: json.encode(body));
+    final fullUrl = '$baseUrl$path';
+    log("fullUrl, $fullUrl, body, $body");
+    final response = await client.put(Uri.parse(fullUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(body));
+    log("response.statusCode, ${response.statusCode}, response.body, ${response.body}");
     if (response.statusCode == 200) {
       if (transformer != null) {
         return right(transformer(json.decode(response.body)));

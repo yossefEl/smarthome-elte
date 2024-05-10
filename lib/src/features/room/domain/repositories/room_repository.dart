@@ -21,4 +21,8 @@ class RoomRepository {
     // }
     return _remoteRepository.getRooms();
   }
+
+  Future<void> update(RoomModel room) async {
+    return _remoteRepository.update(room);
+  }
 }

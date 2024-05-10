@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'device_model.dart';
+import '../../../device/domain/entities/device_model.dart';
 
 class RoomModel {
   int? roomId;
@@ -29,22 +29,28 @@ class RoomModel {
 
   String toRawJson() => json.encode(toJson());
 
-  factory RoomModel.fromJson(Map<String, dynamic> json) => RoomModel(
-        // roomId: json["roomId"] as int?,
-        roomId: int.tryParse(json["roomId"].toString()) ?? 0,
-        devices: json["devices"] == null ? [] : List<DeviceModel>.from(json["devices"]!.map((x) => DeviceModel.fromJson(x))),
-        name: json["name"] as String?,
-        description: json["description"],
-        brightness: int.tryParse(json["brightness"].toString()) ?? 0,
-        occupancy: int.tryParse(json["occupancy"].toString()) ?? 0,
-        oxygenLevel: int.tryParse(json["oxygenLevel"].toString()) ?? 0,
-        temperature: int.tryParse(json["temperature"].toString()) ?? 0,
-        livingRoom: json["livingRoom"] ?? false,
-      );
+  factory RoomModel.fromJson(Map<String, dynamic> json) {
+    parseDouble(val) {
+      final dval = double.tryParse((val ?? '').toString());
+      final toIntVal = dval?.toInt();
+      return toIntVal ?? 0;
+    }
+
+    return RoomModel(
+      // roomId: json["roomId"] as int?,
+      roomId: int.tryParse(json["roomId"].toString()) ?? 0,
+      devices: json["devices"] == null ? [] : List<DeviceModel>.from(json["devices"]!.map((x) => DeviceModel.fromJson(x))),
+      name: json["name"] as String?,
+      description: json["description"],
+      brightness: int.tryParse(json["brightness"].toString()) ?? 0,
+      occupancy: int.tryParse(json["occupancy"].toString()) ?? 0,
+      oxygenLevel: parseDouble(json["oxygenLevel"]),
+      temperature: parseDouble(json["temperature"]),
+      livingRoom: json["livingRoom"] ?? false,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "roomId": roomId,
-        "devices": List<dynamic>.from(devices.map((x) => x.toJson())),
         "name": name,
         "description": description,
         "brightness": brightness,
@@ -53,4 +59,28 @@ class RoomModel {
         "temperature": temperature,
         "livingRoom": livingRoom,
       };
+
+  RoomModel copyWith({
+    int? roomId,
+    List<DeviceModel>? devices,
+    String? name,
+    String? description,
+    int? brightness,
+    int? occupancy,
+    int? oxygenLevel,
+    int? temperature,
+    bool? livingRoom,
+  }) {
+    return RoomModel(
+      roomId: roomId ?? this.roomId,
+      devices: devices ?? this.devices,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      brightness: brightness ?? this.brightness,
+      occupancy: occupancy ?? this.occupancy,
+      oxygenLevel: oxygenLevel ?? this.oxygenLevel,
+      temperature: temperature ?? this.temperature,
+      livingRoom: livingRoom ?? this.livingRoom,
+    );
+  }
 }

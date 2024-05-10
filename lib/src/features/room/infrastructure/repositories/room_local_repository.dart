@@ -11,4 +11,9 @@ class RoomLocalRepository implements RoomRepository {
   Future<List<RoomModel>> getRooms() async {
     return [];
   }
+
+  @override
+  Future<void> update(RoomModel room) {
+    throw UnimplementedError();
+  }
 }

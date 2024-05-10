@@ -15,4 +15,8 @@ class RoomService {
   Future<List<RoomModel>> getRooms() {
     return _repository.getRooms();
   }
+
+  Future<void> update(RoomModel copyWith) async {
+    await _repository.update(copyWith);
+  }
 }

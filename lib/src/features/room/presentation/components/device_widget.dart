@@ -6,11 +6,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:stmart_home_elte/src/core/data/devices_icons.dart';
 import 'package:stmart_home_elte/src/core/functions/functions.dart';
 import 'package:stmart_home_elte/src/core/theme/themes.dart';
-import 'package:stmart_home_elte/src/features/room/domain/entities/device_model.dart';
+import 'package:stmart_home_elte/src/features/device/domain/entities/device_model.dart';
 
 class DeviceInfoWidget extends StatefulHookWidget {
   final DeviceModel device;
-  const DeviceInfoWidget({required this.device, super.key});
+  // onChanged
+  final void Function(bool) onChanged;
+  const DeviceInfoWidget({required this.onChanged, required this.device, super.key});
 
   @override
   State<DeviceInfoWidget> createState() => _DeviceInfoWidgetState();
@@ -19,7 +21,6 @@ class DeviceInfoWidget extends StatefulHookWidget {
 class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
   @override
   Widget build(BuildContext context) {
-    final isOn = useState(false);
     const animationsDuration = Duration(milliseconds: 200);
     return GestureDetector(
       onLongPress: () async {
@@ -45,7 +46,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
         duration: animationsDuration,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: _getContainerBackgroundByState(isOn.value),
+          color: _getContainerBackgroundByState(widget.device.status ?? false),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -55,14 +56,14 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
             AnimatedContainer(
               duration: animationsDuration,
               decoration: BoxDecoration(
-                color: _getIconContainerColorByState(isOn.value),
+                color: _getIconContainerColorByState(widget.device.status ?? false),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Icon(
                   DevicesIcons.getIconByType(widget.device.type),
-                  color: _getIconColorByState(isOn.value),
+                  color: _getIconColorByState(widget.device.status ?? false),
                   size: 32,
                 ),
               ),
@@ -70,7 +71,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
             const SizedBox(height: 8),
             DefaultTextStyle(
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _textColorByState(isOn.value),
+                      color: _textColorByState(widget.device.status ?? false),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -84,7 +85,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
               Text(
                 'Level: ${widget.device.numLevel}',
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: _textColorByState(isOn.value),
+                      color: _textColorByState(widget.device.status ?? false),
                       fontSize: 16,
                     ),
               ),
@@ -95,7 +96,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
                   activeColor: AppColors.palYellow,
                   trackColor: AppColors.offDeviceContainerBackground,
                   value: widget.device.status ?? false,
-                  onChanged: (v) => isOn.value = v),
+                  onChanged: widget.onChanged),
             ),
           ],
         ),
@@ -107,7 +108,7 @@ class _DeviceInfoWidgetState extends State<DeviceInfoWidget> {
       isOn ? AppColors.palYellow : AppColors.offDeviceContainerBackground.withOpacity(0.4);
   Color _getIconColorByState(bool isOn) => isOn ? AppColors.white : AppColors.primaryColor;
   Color _textColorByState(bool isOn) => isOn ? AppColors.white : AppColors.primaryColor;
-  Color _getContainerBackgroundByState(bool isOn) => !isOn ? AppColors.white : AppColors.primaryColor;
+  Color _getContainerBackgroundByState(bool isOn) => !isOn ? AppColors.white : AppColors.primaryColor.withOpacity(0.95);
   IconData _getIconByState(bool isOn) => !isOn ? FluentIcons.lightbulb_20_regular : FluentIcons.lightbulb_20_filled;
 }
 
