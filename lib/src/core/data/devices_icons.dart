@@ -8,7 +8,7 @@ class DevicesIcons {
       // OccupancySensor
       'OccupancySensor'.toLowerCase(): FluentIcons.person_24_regular,
       // OxygenSensor
-      'OxygenSensor'.toLowerCase(): FluentIcons.airplane_take_off_24_regular,
+      'OxygenSensor'.toLowerCase(): Icons.air_rounded,
       // TemperatureSensor
       'TemperatureSensor'.toLowerCase(): FluentIcons.temperature_24_regular,
       // LightBulb
@@ -16,11 +16,13 @@ class DevicesIcons {
       // Window
       'Window'.toLowerCase(): FluentIcons.app_folder_16_filled,
       // AC
-      'AC'.toLowerCase(): FluentIcons.arrow_join_20_regular,
+      'AC'.toLowerCase(): Icons.ac_unit_rounded,
       // Heater
       'Heater'.toLowerCase(): FluentIcons.fire_20_regular,
       // ElectricPlug
       'ElectricPlug'.toLowerCase(): FluentIcons.plug_connected_20_regular,
+      'Stove'.toLowerCase(): FluentIcons.food_16_regular,
+      'VentilationSystem'.toLowerCase(): Icons.wind_power_rounded,
     };
     if (type == null || iconsByTypeMap.containsKey(type.toLowerCase()) == false) {
       return FluentIcons.error_circle_12_filled;

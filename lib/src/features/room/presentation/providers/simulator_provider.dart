@@ -16,6 +16,7 @@ class SimulatorState {
   int occupancy = 0;
   int oxygenLevel = 0;
   int temperature = 0;
+  bool isVisibile = true;
   SimulatorState();
 
   SimulatorState copyWith({
@@ -70,6 +71,7 @@ class SimulatorNotifier extends StateNotifier<SimulatorState> {
     int? occupancy,
     int? oxygenLevel,
     int? temperature,
+    bool? isVisibile,
   }) {
     state = SimulatorState()
       ..brightness = brightness ?? 0
@@ -80,6 +82,7 @@ class SimulatorNotifier extends StateNotifier<SimulatorState> {
 
   Future<void> simulate(RoomModel? room) async {
     if (room == null) return;
+
     await _roomsService.update(
       room.copyWith(
         brightness: state.brightness,
@@ -90,5 +93,9 @@ class SimulatorNotifier extends StateNotifier<SimulatorState> {
     );
 
     _ref.read(roomsProvider.notifier).get();
+  }
+
+  void toggle() {
+    // state = state.copyWith(isVisibile: !state.isVisibile);
   }
 }

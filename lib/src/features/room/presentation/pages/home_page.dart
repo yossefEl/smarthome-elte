@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:stmart_home_elte/src/features/room/presentation/providers/simulator_provider.dart';
 import 'package:stmart_home_elte/src/shared/presentation/components/responsive_view.dart';
 import 'package:stmart_home_elte/src/shared/presentation/providers/conntectivity_providers.dart';
 
@@ -64,16 +65,22 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           const Icon(Icons.notifications, color: AppColors.primaryColor, size: 32),
-          IconButton(
-              padding: EdgeInsets.zero,
+          const SizedBox(width: 16),
+          ElevatedButton(
               style: IconButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
+                foregroundColor: AppColors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              onPressed: () {},
-              icon: const Icon(Icons.add, color: AppColors.white, size: 28)),
+              onPressed: () {
+                ref.read(simulatorProvider.notifier).toggle();
+              },
+              // icon: const Icon(Icons.add, color: AppColors.white, size: 28),
+              child: Text(
+                ref.watch(simulatorProvider).isVisibile ? "Hide Simulator" : "Show Simulator",
+              )),
           const SizedBox(width: 16),
         ],
       ),
@@ -87,15 +94,27 @@ class _HomePageState extends ConsumerState<HomePage> {
                 flex: 1,
                 child: MobileHomePageBody(
                   pageController: pageController,
-                  crossAxisCount: 3,
+                  crossAxisCount: _getCrossAxisCount(ref.watch(simulatorProvider).isVisibile, context),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: SimulatorView(pageController: pageController),
-              ),
+              if (ref.watch(simulatorProvider).isVisibile)
+                Expanded(
+                  flex: 1,
+                  child: SimulatorView(pageController: pageController),
+                ),
             ],
           )),
     );
+  }
+
+  int _getCrossAxisCount(bool isVisible, BuildContext context) {
+    final bool isPortraint = MediaQuery.orientationOf(context) == Orientation.portrait;
+    if (isVisible && isPortraint) {
+      return 2;
+    } else if (isVisible && !isPortraint) {
+      return 6;
+    } else {
+      return 2;
+    }
   }
 }
